@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/tvari-tokyo-cafe-159065.mp3-dbce0115f77817e972d13bd72069c4e6.mp3str"
+
+[deps]
+
+source_file="res://songs/tvari-tokyo-cafe-159065.mp3"
+dest_files=[ "res://.import/tvari-tokyo-cafe-159065.mp3-dbce0115f77817e972d13bd72069c4e6.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
