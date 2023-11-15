@@ -1,5 +1,7 @@
 extends Area2D
 
+export var note_speed = 1.5
+
 var distance_to_target = Vector2(0.0, 0.0)
 
 var target_position = Vector2(0.0, 0.0)
@@ -24,10 +26,13 @@ func _physics_process(delta):
 		
 func initialize():
 	distance_to_target = Vector2(target_position.x - note_spawn_position.x, target_position.y - note_spawn_position.y)
-	speed.x = distance_to_target.x / 1.5
-	speed.y = distance_to_target.y / 1.5
+	speed.x = distance_to_target.x / note_speed
+	speed.y = distance_to_target.y / note_speed
 	
 func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()
+	
+func destroy_note():
 	queue_free()
 	
 func update_hit_spot_position(pos):

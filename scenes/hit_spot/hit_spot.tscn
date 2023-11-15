@@ -5,10 +5,10 @@
 [ext_resource path="res://scenes/hit_spot/note_spawn_position.gd" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 24.0
+radius = 28.0
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 16.0
+radius = 8.0
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 24.0
@@ -71,8 +71,8 @@ tracks/1/keys = {
 }
 
 [node name="HitSpot" type="Node2D"]
-position = Vector2( 344, 272 )
 script = ExtResource( 1 )
+input = "hitspot_1"
 
 [node name="Pivot" type="Position2D" parent="."]
 rotation = 0.261799
