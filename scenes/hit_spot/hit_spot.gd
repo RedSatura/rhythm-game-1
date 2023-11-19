@@ -13,6 +13,7 @@ var note_spawn_pos = Vector2.ZERO
 
 var good = false
 var perfect = false
+var missable = true
 var current_note = null
 
 var movement = true
@@ -20,7 +21,7 @@ var movement = true
 var step = -1
 
 signal add_score(score)
-signal note_missed
+signal note_missed(count_miss)
 
 onready var note_spawn_position = $NoteSpawnPosition
 onready var hit_spot_position = $Pivot/HitSpotPosition
@@ -45,10 +46,10 @@ func spawn_note():
 	movement = false
 	note_spawn_cooldown.start(note_speed)
 
-func _on_GoodArea_area_entered(area):
+func _on_GoodArea_area_entered(_area):
 	good = true
-	current_note = area
-
+	missable = false
+	
 func _on_PerfectArea_area_entered(_area):
 	perfect = true
 
@@ -57,7 +58,7 @@ func _on_PerfectArea_area_exited(_area):
 
 func _on_GoodArea_area_exited(_area):
 	good = false
-	current_note = null
+	missable = true
 	
 func _unhandled_input(event):
 	if event.is_action_pressed(input, false):
@@ -65,11 +66,15 @@ func _unhandled_input(event):
 			if perfect:
 				current_note.destroy_note()
 				emit_signal("add_score", "PERFECT")
+				current_note = null
 			elif good:
 				current_note.destroy_note()
 				emit_signal("add_score", "GOOD")
-			else:
-				pass
+				current_note = null
+			elif missable:
+				emit_signal("note_missed")
+				current_note.destroy_note()
+				current_note = null
 
 func change_rotation_degrees(degrees: float, seconds: float):
 	if movement:
@@ -89,5 +94,12 @@ func _on_NoteSpawnCooldown_timeout():
 	movement = true
 
 func _on_MissDetector_area_entered(area):
-	emit_signal("note_missed")
+	current_note = area
+	missable = true
+
+func _on_MissDetector_area_exited(area):
+	current_note = null
+
+func _on_MissedNotesManager_area_entered(area):
 	area.destroy_note()
+	emit_signal("note_missed")
