@@ -16,7 +16,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-HitSpotEventBus="*res://scenes/hit_spot/event bus/hit_spot_event_bus.gd"
+HitSpotEventBus="*res://scenes/hitspots/hit_spot/event bus/hit_spot_event_bus.gd"
 
 [input]
 

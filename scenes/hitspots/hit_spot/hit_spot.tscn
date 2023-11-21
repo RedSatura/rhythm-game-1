@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://scenes/hit_spot/hit_spot.gd" type="Script" id=1]
-[ext_resource path="res://scenes/hit_spot/hit_spot_position.gd" type="Script" id=2]
-[ext_resource path="res://scenes/hit_spot/note_spawn_position.gd" type="Script" id=3]
+[ext_resource path="res://scenes/hitspots/hit_spot/hit_spot.gd" type="Script" id=1]
+[ext_resource path="res://scenes/hitspots/hit_spot/hit_spot_position.gd" type="Script" id=2]
+[ext_resource path="res://scenes/hitspots/hit_spot/note_spawn_position.gd" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 28.0
+radius = 24.0
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
@@ -29,6 +29,9 @@ note_spawn_interval = 0.5
 [node name="HitSpotPosition" type="Position2D" parent="Pivot"]
 position = Vector2( 128, 0 )
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="GoodArea" type="Area2D" parent="Pivot/HitSpotPosition"]
 collision_mask = 2
@@ -63,16 +66,16 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pivot/HitSpotPosition/MissedNotesManager"]
 shape = SubResource( 5 )
 
-[node name="NoteSpawnPosition" type="Position2D" parent="."]
+[node name="NoteSpawnPosition" type="Position2D" parent="Pivot"]
 position = Vector2( 512, 0 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Area2D" type="Area2D" parent="NoteSpawnPosition"]
+[node name="Area2D" type="Area2D" parent="Pivot/NoteSpawnPosition"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="NoteSpawnPosition/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivot/NoteSpawnPosition/Area2D"]
 shape = SubResource( 3 )
 
 [node name="Timer" type="Timer" parent="."]

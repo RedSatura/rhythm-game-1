@@ -4,6 +4,8 @@ export var input = ""
 export var note_speed = 1.5
 export var note_spawn_interval = 1.0
 
+export var initial_rotation = 0
+
 var note = load("res://scenes/note/note.tscn")
 var instance
 
@@ -23,7 +25,7 @@ var step = -1
 signal add_score(score)
 signal note_missed(count_miss)
 
-onready var note_spawn_position = $NoteSpawnPosition
+onready var note_spawn_position = $Pivot/NoteSpawnPosition
 onready var hit_spot_position = $Pivot/HitSpotPosition
 onready var pivot = $Pivot
 onready var note_spawn_cooldown = $NoteSpawnCooldown
@@ -31,6 +33,7 @@ onready var timer = $Timer
 onready var tween = $Tween
 
 func _ready():
+	pivot.rotation_degrees = initial_rotation
 	timer.wait_time = note_spawn_interval
 	
 func _physics_process(_delta):
@@ -65,14 +68,14 @@ func _unhandled_input(event):
 		if current_note != null:
 			if perfect:
 				current_note.destroy_note()
-				emit_signal("add_score", "PERFECT")
+				HitSpotEventBus.emit_signal("update_score", "PERFECT")
 				current_note = null
 			elif good:
 				current_note.destroy_note()
-				emit_signal("add_score", "GOOD")
+				HitSpotEventBus.emit_signal("update_score", "GOOD")
 				current_note = null
 			elif missable:
-				emit_signal("note_missed")
+				HitSpotEventBus.emit_signal("note_missed")
 				current_note.destroy_note()
 				current_note = null
 
@@ -102,4 +105,4 @@ func _on_MissDetector_area_exited(area):
 
 func _on_MissedNotesManager_area_entered(area):
 	area.destroy_note()
-	emit_signal("note_missed")
+	HitSpotEventBus.emit_signal("note_missed")

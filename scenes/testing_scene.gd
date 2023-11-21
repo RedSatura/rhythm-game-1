@@ -5,8 +5,8 @@ var good = 0
 var miss = 0
 
 func _ready():
-	$HitSpots/HitSpot.connect("add_score", self, "update_score")
-	$HitSpots/HitSpot.connect("note_missed", self, "note_missed")
+	HitSpotEventBus.connect("update_score", self, "update_score")
+	HitSpotEventBus.connect("note_missed", self, "note_missed")
 
 func update_score(score):
 	if score == "PERFECT":
