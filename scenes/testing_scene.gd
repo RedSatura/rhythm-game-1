@@ -4,6 +4,8 @@ var perfect = 0
 var good = 0
 var miss = 0
 
+onready var hitspots = $HitSpots
+
 func _ready():
 	HitSpotEventBus.connect("update_score", self, "update_score")
 	HitSpotEventBus.connect("note_missed", self, "note_missed")
@@ -19,7 +21,7 @@ func update_score(score):
 		pass
 
 func update_label():
-	$ScoreLabel.text = "Perfect: " + str(perfect) + "\nGood: " + str(good) + "\nMiss: " + str(miss)
+	$CanvasLayer/ScoreLabel.text = "Perfect: " + str(perfect) + "\nGood: " + str(good) + "\nMiss: " + str(miss)
 
 func note_missed():
 	miss += 1

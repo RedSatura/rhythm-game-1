@@ -10,6 +10,8 @@ var speed = Vector2(0.0, 0.0)
 
 var hit = false
 
+onready var note_sprite = $NoteSprite
+
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("get_hit_spot_position", self, "update_hit_spot_position")

@@ -18,6 +18,7 @@ var perfect = false
 var missable = true
 var current_note = null
 
+var note_spawnable = true
 var movement = true
 
 var step = -1
@@ -40,14 +41,15 @@ func _physics_process(_delta):
 	pass
 
 func spawn_note():
-	instance = note.instance()
-	instance.global_position = note_spawn_position.global_position
-	instance.target_position = hit_spot_position.global_position
-	instance.note_spawn_position = note_spawn_position.global_position
-	instance.note_speed = note_speed
-	add_child(instance)
-	movement = false
-	note_spawn_cooldown.start(note_speed)
+	if note_spawnable:
+		instance = note.instance()
+		instance.global_position = note_spawn_position.global_position
+		instance.target_position = hit_spot_position.global_position
+		instance.note_spawn_position = note_spawn_position.global_position
+		instance.note_speed = note_speed
+		add_child(instance)
+		movement = false
+		note_spawn_cooldown.start(note_speed)
 
 func _on_GoodArea_area_entered(_area):
 	good = true
@@ -80,11 +82,13 @@ func _unhandled_input(event):
 				current_note = null
 
 func change_rotation_degrees(degrees: float, seconds: float):
+	note_spawnable = false
 	if movement:
 		tween.interpolate_property(pivot, "rotation_degrees", pivot.rotation_degrees, degrees, seconds, Tween.TRANS_LINEAR)
 		tween.start()
 	
 func add_rotation_degrees(degrees: float, seconds: float):
+	note_spawnable = false
 	if movement:
 		tween.interpolate_property(pivot, "rotation_degrees", pivot.rotation_degrees, pivot.rotation_degrees + degrees, seconds, Tween.TRANS_LINEAR)
 		tween.start()
@@ -106,3 +110,9 @@ func _on_MissDetector_area_exited(area):
 func _on_MissedNotesManager_area_entered(area):
 	area.destroy_note()
 	HitSpotEventBus.emit_signal("note_missed")
+	
+func change_note_spawn_position(new_position: Vector2):
+	note_spawn_position.position = new_position
+
+func _on_Tween_tween_all_completed():
+	note_spawnable = true
