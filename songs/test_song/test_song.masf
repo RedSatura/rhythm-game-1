@@ -1,0 +1,12 @@
+TITLE: Test Song
+DESC: RedSatura
+CHARTER: RedSatura
+BPM: 120
+OFFSET: 0
+AUDIOSRC:
+VIDEOSRC:
+
+MagentaSongFormatStart
+000000012341234123,
+123412344444333322,
+MagentaSongFormatEnd

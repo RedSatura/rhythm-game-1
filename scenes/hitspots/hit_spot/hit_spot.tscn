@@ -24,7 +24,7 @@ radius = 24.0
 script = ExtResource( 1 )
 input = "hitspot_1"
 note_speed = 1.0
-note_spawn_interval = 0.522
+note_spawn_interval = 0.366
 
 [node name="Pivot" type="Position2D" parent="."]
 
