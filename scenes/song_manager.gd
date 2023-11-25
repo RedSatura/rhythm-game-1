@@ -2,7 +2,10 @@ extends Node2D
 
 export(String, FILE) var song_path = ""
 
-var song_content_starter = "MagentaSongFormatStart"
+export var song_content_starter = "MagentaSongFormatStart"
+export var song_content_ender = "MagentaSongFormatEnd"
+
+export var song_offset: float = 0
 
 var file_content = ""
 var song_content = ""
@@ -21,5 +24,10 @@ func initialize_file():
 		pass
 
 func get_song_content():
-	var song_content_position = file_content.find(song_content_starter) + song_content_starter.length()
-	print(song_content_position)
+	var song_info_extractor = RegEx.new()
+	song_info_extractor.compile("(?<=" + str(song_content_starter) + ")((.|\n)*)(?=" + str(song_content_ender) + ")")
+	var result = song_info_extractor.search(file_content)
+	if result:
+		print(result.get_string().strip_edges())
+	else:
+		pass
