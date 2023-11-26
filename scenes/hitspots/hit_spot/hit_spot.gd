@@ -23,9 +23,6 @@ var movement = true
 
 var step = -1
 
-signal add_score(score)
-signal note_missed(count_miss)
-
 onready var note_spawn_position = $Pivot/NoteSpawnPosition
 onready var hit_spot_position = $Pivot/HitSpotPosition
 onready var pivot = $Pivot
@@ -104,7 +101,7 @@ func _on_MissDetector_area_entered(area):
 	current_note = area
 	missable = true
 
-func _on_MissDetector_area_exited(area):
+func _on_MissDetector_area_exited(_area):
 	current_note = null
 
 func _on_MissedNotesManager_area_entered(area):

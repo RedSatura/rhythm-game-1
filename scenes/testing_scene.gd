@@ -4,10 +4,10 @@ var perfect = 0
 var good = 0
 var miss = 0
 
-onready var hitspots = $HitSpots
-
 func _ready():
+# warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("update_score", self, "update_score")
+# warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("note_missed", self, "note_missed")
 
 func update_score(score):

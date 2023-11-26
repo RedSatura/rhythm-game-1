@@ -2,6 +2,7 @@ extends AudioStreamPlayer
 
 export var bpm = 100
 export var measures = 4
+export var offset = 0
 
 var song_position = 0.0
 var song_position_in_beats = 1
@@ -48,10 +49,10 @@ func play_with_beat_offset(num):
 	$StartTimer.wait_time = seconds_per_beat
 	$StartTimer.start()
 	
-func play_from_beat(beat, offset):
+func play_from_beat(beat, offset_num):
 	play()
 	seek(beat * seconds_per_beat)
-	beats_before_start = offset
+	beats_before_start = offset_num
 	measure = beat % measures
 	
 func _on_StartTimer_timeout():

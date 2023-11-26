@@ -1,9 +1,9 @@
 TITLE: Test Song
 DESC: RedSatura
 CHARTER: RedSatura
-BPM: 120
+BPM: 140
 OFFSET: 0
-AUDIOSRC:
+AUDIOSRC:songs/test_song/tvari-tokyo-cafe-159065.mp3
 VIDEOSRC:
 
 MagentaSongFormatStart

@@ -10,11 +10,14 @@ export var song_offset: float = 0
 var file_content = ""
 var song_content = ""
 
-func _ready():
-	initialize_file()
-	get_song_content()
+onready var conductor = $Conductor
 
-func initialize_file():
+func _ready():
+	get_file_content()
+	get_song_content()
+	initialize_conductor()
+
+func get_file_content():
 	var file = File.new()
 	if file.file_exists(song_path):
 		file.open(song_path, File.READ)
@@ -28,6 +31,35 @@ func get_song_content():
 	song_info_extractor.compile("(?<=" + str(song_content_starter) + ")((.|\n)*)(?=" + str(song_content_ender) + ")")
 	var result = song_info_extractor.search(file_content)
 	if result:
-		print(result.get_string().strip_edges())
+		pass
+	else:
+		pass
+
+func initialize_conductor():
+	var bpm_regex = RegEx.new()
+	var offset_regex = RegEx.new()
+	var audio_regex = RegEx.new()
+	bpm_regex.compile("(?<=BPM:).*")
+	offset_regex.compile("(?<=OFFSET:).*")
+	audio_regex.compile("(?<=AUDIOSRC:).*")
+	var bpm_result = bpm_regex.search(file_content)
+	var offset_result = offset_regex.search(file_content)
+	var audio_result = audio_regex.search(file_content)
+	
+	if bpm_result:
+		conductor.bpm = int(bpm_result.get_string().strip_edges())
+	else:
+		pass
+		
+	if offset_result:
+		conductor.offset = int(offset_result.get_string().strip_edges())
+	else:
+		pass
+		
+	if audio_result:
+		var result = audio_result.get_string().strip_edges()
+		var audio = load(result)
+		conductor.stream = audio
+		conductor.playing = true
 	else:
 		pass
