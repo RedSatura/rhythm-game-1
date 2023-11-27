@@ -7,6 +7,7 @@ AUDIOSRC:songs/test_song/tvari-tokyo-cafe-159065.mp3
 VIDEOSRC:
 
 MagentaSongFormatStart
-000000012341234123,
-123412344444333322,
+[0a][0a][1b/0.5][3d/-12\1.5],
+[0a][e][e][e],
+[1a][1a][1a][1a],
 MagentaSongFormatEnd

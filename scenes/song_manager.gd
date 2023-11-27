@@ -9,13 +9,51 @@ export var song_offset: float = 0
 
 var file_content = ""
 var song_content = ""
+var finished_chart = ""
 
+onready var hitspots = $HitSpots
 onready var conductor = $Conductor
+onready var offset_timer = $OffsetTimer
 
 func _ready():
+	HitSpotEventBus.connect("report_beat", self, "beat_reported")
 	get_file_content()
 	get_song_content()
+	process_song_content()
 	initialize_conductor()
+	#conductor.playing = true
+	
+func process_song_content():
+	var regex = RegEx.new()
+	regex.compile("\\[.+?\\]")
+	var result = regex.search_all(song_content)
+	if result:
+		finished_chart = result
+	else:
+		pass
+	
+func start_song():
+	conductor.playing = true
+	
+func beat_reported(beat_number):
+	var beat = beat_number - 1
+	if beat < finished_chart.size():
+		if finished_chart[beat] != null:
+			var result = get_bracket_content(finished_chart[beat].get_string().strip_edges())
+			process_command(result)
+		else:
+			pass
+	else:
+		pass
+		
+func process_command(command):
+	print(command)
+	
+func get_bracket_content(content):
+	var bracket_content = RegEx.new()
+	bracket_content.compile("(?<=\\[)(.*?)(?=\\])")
+	var result = bracket_content.search(content)
+	return result.get_string().strip_edges()
 
 func get_file_content():
 	var file = File.new()
@@ -31,7 +69,7 @@ func get_song_content():
 	song_info_extractor.compile("(?<=" + str(song_content_starter) + ")((.|\n)*)(?=" + str(song_content_ender) + ")")
 	var result = song_info_extractor.search(file_content)
 	if result:
-		pass
+		song_content = result.get_string().strip_edges()
 	else:
 		pass
 

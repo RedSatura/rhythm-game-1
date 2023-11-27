@@ -8,18 +8,22 @@ script = ExtResource( 2 )
 
 [node name="HitSpot1" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 0, 0, 1 )
+initial_rotation = 180
+original_color = Color( 1, 0, 0, 1 )
 
 [node name="HitSpot2" parent="." instance=ExtResource( 1 )]
 modulate = Color( 1, 1, 0, 1 )
 input = "hitspot_2"
-initial_rotation = 90
+initial_rotation = 270
+original_color = Color( 1, 1, 0, 1 )
 
 [node name="HitSpot3" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0, 1, 0, 1 )
 input = "hitspot_3"
-initial_rotation = 180
+initial_rotation = 90
+original_color = Color( 0, 1, 0, 1 )
 
 [node name="HitSpot4" parent="." instance=ExtResource( 1 )]
 modulate = Color( 0, 0, 1, 1 )
 input = "hitspot_4"
-initial_rotation = 270
+original_color = Color( 0, 0, 1, 1 )

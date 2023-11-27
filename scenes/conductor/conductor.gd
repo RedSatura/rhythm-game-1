@@ -36,6 +36,7 @@ func _report_beat():
 			measure = 1
 		emit_signal("beat", song_position_in_beats)
 		emit_signal("measure", measure)
+		HitSpotEventBus.emit_signal("report_beat", song_position_in_beats)
 		last_reported_beat = song_position_in_beats
 		measure += 1
 		

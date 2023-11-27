@@ -6,6 +6,8 @@ export var note_spawn_interval = 1.0
 
 export var initial_rotation = 0
 
+export var original_color = Color(0, 0, 0, 0)
+
 var note = load("res://scenes/note/note.tscn")
 var instance
 
@@ -27,7 +29,8 @@ onready var note_spawn_position = $Pivot/NoteSpawnPosition
 onready var hit_spot_position = $Pivot/HitSpotPosition
 onready var pivot = $Pivot
 onready var note_spawn_cooldown = $NoteSpawnCooldown
-onready var timer = $Timer
+onready var timer = $NoteSpawnInterval
+onready var input_cooldown = $InputCooldown
 onready var tween = $Tween
 
 func _ready():
@@ -46,7 +49,6 @@ func spawn_note():
 		instance.note_speed = note_speed
 		add_child(instance)
 		movement = false
-		note_spawn_cooldown.start(note_speed)
 
 func _on_GoodArea_area_entered(_area):
 	good = true
@@ -64,6 +66,8 @@ func _on_GoodArea_area_exited(_area):
 	
 func _unhandled_input(event):
 	if event.is_action_pressed(input, false):
+		self.modulate = Color(1, 1, 1, 1)
+		input_cooldown.start()
 		if current_note != null:
 			if perfect:
 				current_note.destroy_note()
@@ -113,3 +117,6 @@ func change_note_spawn_position(new_position: Vector2):
 
 func _on_Tween_tween_all_completed():
 	note_spawnable = true
+
+func _on_InputCooldown_timeout():
+	self.modulate = original_color
