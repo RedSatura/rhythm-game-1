@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/song_manager.gd" type="Script" id=1]
 [ext_resource path="res://scenes/hitspots/hitspots.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/conductor/conductor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://songs/Bad Apple!!/video.ogv" type="VideoStream" id=4]
 
 [node name="SongManager" type="Node2D"]
 script = ExtResource( 1 )
@@ -11,6 +12,7 @@ song_path = "res://songs/test_song/test_song.masf"
 [node name="HitSpots" parent="." instance=ExtResource( 2 )]
 
 [node name="Conductor" parent="." instance=ExtResource( 3 )]
+autoplay = false
 
 [node name="Label" type="Label" parent="."]
 margin_right = 512.0
@@ -21,3 +23,15 @@ __meta__ = {
 
 [node name="OffsetTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="VideoPlayer" type="VideoPlayer" parent="CanvasLayer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+stream = ExtResource( 4 )
+autoplay = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

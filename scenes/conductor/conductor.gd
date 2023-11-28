@@ -8,7 +8,7 @@ var song_position = 0.0
 var song_position_in_beats = 1
 var seconds_per_beat = 60.0 / bpm
 var last_reported_beat = 0
-var beats_before_start = 0
+var beats_before_start = 0  
 var measure = 1
 
 var closest = 0

@@ -16,12 +16,13 @@ onready var conductor = $Conductor
 onready var offset_timer = $OffsetTimer
 
 func _ready():
+# warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
 	get_file_content()
 	get_song_content()
 	process_song_content()
 	initialize_conductor()
-	#conductor.playing = true
+	start_song()
 	
 func process_song_content():
 	var regex = RegEx.new()
@@ -47,7 +48,49 @@ func beat_reported(beat_number):
 		pass
 		
 func process_command(command):
-	print(command)
+	var function_getter = RegEx.new()
+	function_getter.compile(".(?=\\/)")
+	var function = function_getter.search(command).get_string().strip_edges()
+	if function:
+		match function:
+			"a": #spawn note
+				var lane = get_lane_number(command)
+				hitspots.hitspot_spawn_note(lane)
+			"b": #change rotation degrees
+				var lane = get_lane_number(command)
+				var parameters = get_command_parameters(command)
+				hitspots.change_hitspot_rotation_degrees(0, 90, 1)
+				hitspots.change_hitspot_rotation_degrees(lane, parameters[0], parameters[1])
+			"c": #change note speed - Soon!
+				pass
+			"d": #change note spawn position - Soon!
+				pass
+			"e": #empty note
+				pass
+			_:
+				pass
+	else:
+		pass
+		
+func get_command_parameters(command):
+	var regex = RegEx.new()
+	regex.compile("(?<=#)(.*?)(?=#)")
+	var parameters = []
+	for result in regex.search_all(command):
+		if result:
+			parameters.push_back(float(result.get_string()))
+		else:
+			return
+	return parameters
+		
+func get_lane_number(command):
+	var lane = RegEx.new()
+	lane.compile("(?<=\\/)\\d")
+	var result = lane.search(command)
+	if result:
+		return int(result.get_string().strip_edges())
+	else:
+		pass
 	
 func get_bracket_content(content):
 	var bracket_content = RegEx.new()

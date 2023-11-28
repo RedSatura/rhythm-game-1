@@ -49,6 +49,7 @@ func spawn_note():
 		instance.note_speed = note_speed
 		add_child(instance)
 		movement = false
+		note_spawn_cooldown.start(note_speed)
 
 func _on_GoodArea_area_entered(_area):
 	good = true
@@ -87,6 +88,8 @@ func change_rotation_degrees(degrees: float, seconds: float):
 	if movement:
 		tween.interpolate_property(pivot, "rotation_degrees", pivot.rotation_degrees, degrees, seconds, Tween.TRANS_LINEAR)
 		tween.start()
+	else:
+		print("Failed!")
 	
 func add_rotation_degrees(degrees: float, seconds: float):
 	note_spawnable = false
