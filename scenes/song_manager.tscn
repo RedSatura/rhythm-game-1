@@ -12,14 +12,9 @@ song_path = "res://songs/test_song/test_song.masf"
 [node name="HitSpots" parent="." instance=ExtResource( 2 )]
 
 [node name="Conductor" parent="." instance=ExtResource( 3 )]
+volume_db = -10.0
 autoplay = false
-
-[node name="Label" type="Label" parent="."]
-margin_right = 512.0
-margin_bottom = 384.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+bpm = 138
 
 [node name="OffsetTimer" type="Timer" parent="."]
 one_shot = true
@@ -28,10 +23,28 @@ one_shot = true
 layer = -1
 
 [node name="VideoPlayer" type="VideoPlayer" parent="CanvasLayer"]
+modulate = Color( 1, 1, 1, 0.501961 )
 margin_right = 1024.0
 margin_bottom = 600.0
 stream = ExtResource( 4 )
-autoplay = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+margin_right = 512.0
+margin_bottom = 384.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 368.0
+margin_top = 232.0
+margin_right = 680.0
+margin_bottom = 304.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

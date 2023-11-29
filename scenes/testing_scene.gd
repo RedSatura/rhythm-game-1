@@ -21,7 +21,7 @@ func update_score(score):
 		pass
 
 func update_label():
-	$CanvasLayer/ScoreLabel.text = "Perfect: " + str(perfect) + "\nGood: " + str(good) + "\nMiss: " + str(miss)
+	$ScoreLabel.text = "Perfect: " + str(perfect) + "\nGood: " + str(good) + "\nMiss: " + str(miss)
 
 func note_missed():
 	miss += 1

@@ -18,6 +18,11 @@ config/icon="res://icon.png"
 
 HitSpotEventBus="*res://scenes/hitspots/hit_spot/event bus/hit_spot_event_bus.gd"
 
+[display]
+
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
 [input]
 
 hitspot_1={

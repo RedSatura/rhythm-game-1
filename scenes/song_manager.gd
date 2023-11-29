@@ -5,7 +5,10 @@ export(String, FILE) var song_path = ""
 export var song_content_starter = "MagentaSongFormatStart"
 export var song_content_ender = "MagentaSongFormatEnd"
 
+
+export var song_bpm: int = 120
 export var song_offset: float = 0
+
 
 var file_content = ""
 var song_content = ""
@@ -18,11 +21,12 @@ onready var offset_timer = $OffsetTimer
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
+	conductor.bpm = song_bpm
+	conductor.offset = song_offset
 	get_file_content()
 	get_song_content()
 	process_song_content()
 	initialize_conductor()
-	start_song()
 	
 func process_song_content():
 	var regex = RegEx.new()
@@ -35,13 +39,19 @@ func process_song_content():
 	
 func start_song():
 	conductor.playing = true
+	$CanvasLayer/VideoPlayer.play()
 	
 func beat_reported(beat_number):
 	var beat = beat_number - 1
 	if beat < finished_chart.size():
 		if finished_chart[beat] != null:
-			var result = get_bracket_content(finished_chart[beat].get_string().strip_edges())
-			process_command(result)
+			var beat_content = get_bracket_content(finished_chart[beat].get_string().strip_edges())
+			if beat_content:
+				var commands = RegEx.new()
+				commands.compile("[^,]+")
+				var result = commands.search_all(beat_content)
+				for x in result:
+					process_command(x.get_string().strip_edges())
 		else:
 			pass
 	else:
@@ -49,8 +59,13 @@ func beat_reported(beat_number):
 		
 func process_command(command):
 	var function_getter = RegEx.new()
+	var function = null
 	function_getter.compile(".(?=\\/)")
-	var function = function_getter.search(command).get_string().strip_edges()
+	var result = function_getter.search(command)
+	if result:
+		function = result.get_string().strip_edges()
+	else:
+		pass
 	if function:
 		match function:
 			"a": #spawn note
@@ -59,10 +74,11 @@ func process_command(command):
 			"b": #change rotation degrees
 				var lane = get_lane_number(command)
 				var parameters = get_command_parameters(command)
-				hitspots.change_hitspot_rotation_degrees(0, 90, 1)
 				hitspots.change_hitspot_rotation_degrees(lane, parameters[0], parameters[1])
-			"c": #change note speed - Soon!
-				pass
+			"c": #add rotation degrees
+				var lane = get_lane_number(command)
+				var parameters = get_command_parameters(command)
+				hitspots.add_hitspot_rotation_degrees(lane, parameters[0], parameters[1])
 			"d": #change note spawn position - Soon!
 				pass
 			"e": #empty note
@@ -141,6 +157,9 @@ func initialize_conductor():
 		var result = audio_result.get_string().strip_edges()
 		var audio = load(result)
 		conductor.stream = audio
-		conductor.playing = true
 	else:
 		pass
+
+func _on_Button_pressed():
+	$Button.visible = false
+	start_song()
