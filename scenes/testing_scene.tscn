@@ -1,13 +1,26 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/song_manager.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/Playpen_Sans/PlaypenSans-VariableFont_wght.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scenes/testing_scene.gd" type="Script" id=3]
+[ext_resource path="res://assets/Playpen_Sans/static/PlaypenSans-Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://scenes/ui/note_feedback_label.gd" type="Script" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+outline_size = 2
+font_data = ExtResource( 4 )
 
 [node name="TestingScene" type="Node2D"]
 position = Vector2( 512, 300 )
 script = ExtResource( 3 )
 
 [node name="SongManager" parent="." instance=ExtResource( 1 )]
+song_path = "res://songs/Bad Apple!!/Bad Apple!!.masf"
+auto_mode = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2( 2, 2 )
@@ -17,6 +30,7 @@ margin_left = -504.0
 margin_top = -292.0
 margin_right = -200.0
 margin_bottom = -244.0
+custom_fonts/font = SubResource( 1 )
 text = "Perfect: 0
 Good: 0
 Miss: 0"
@@ -24,3 +38,26 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NoteFeedbackLabel" type="Label" parent="."]
+visible = false
+margin_left = -64.0
+margin_top = -32.0
+margin_right = 64.0
+margin_bottom = 32.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+align = 1
+valign = 1
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="NoteFeedbackLabel"]
+
+[node name="VisibilityTimer" type="Timer" parent="NoteFeedbackLabel"]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="NoteFeedbackLabel/VisibilityTimer" to="NoteFeedbackLabel" method="_on_VisibilityTimer_timeout"]

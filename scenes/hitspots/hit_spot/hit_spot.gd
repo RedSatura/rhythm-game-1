@@ -8,6 +8,8 @@ export var initial_rotation = 0
 
 export var original_color = Color(0, 0, 0, 0)
 
+var auto_mode = false
+
 var note = load("res://scenes/note/note.tscn")
 var instance
 
@@ -57,6 +59,10 @@ func _on_GoodArea_area_entered(_area):
 	
 func _on_PerfectArea_area_entered(_area):
 	perfect = true
+	if auto_mode:
+		current_note.destroy_note()
+		HitSpotEventBus.emit_signal("update_score", "PERFECT")
+		current_note = null
 
 func _on_PerfectArea_area_exited(_area):
 	perfect = false
@@ -66,22 +72,23 @@ func _on_GoodArea_area_exited(_area):
 	missable = true
 	
 func _unhandled_input(event):
-	if event.is_action_pressed(input, false):
-		self.modulate = Color(1, 1, 1, 1)
-		input_cooldown.start()
-		if current_note != null:
-			if perfect:
-				current_note.destroy_note()
-				HitSpotEventBus.emit_signal("update_score", "PERFECT")
-				current_note = null
-			elif good:
-				current_note.destroy_note()
-				HitSpotEventBus.emit_signal("update_score", "GOOD")
-				current_note = null
-			elif missable:
-				HitSpotEventBus.emit_signal("note_missed")
-				current_note.destroy_note()
-				current_note = null
+	if !auto_mode:
+		if event.is_action_pressed(input, false):
+			self.modulate = Color(1, 1, 1, 1)
+			input_cooldown.start()
+			if current_note != null:
+				if perfect:
+					current_note.destroy_note()
+					HitSpotEventBus.emit_signal("update_score", "PERFECT")
+					current_note = null
+				elif good:
+					current_note.destroy_note()
+					HitSpotEventBus.emit_signal("update_score", "GOOD")
+					current_note = null
+				elif missable:
+					HitSpotEventBus.emit_signal("note_missed")
+					current_note.destroy_note()
+					current_note = null
 
 func change_rotation_degrees(degrees: float, seconds: float):
 	note_spawnable = false

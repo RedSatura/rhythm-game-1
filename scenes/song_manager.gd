@@ -2,6 +2,8 @@ extends Node2D
 
 export(String, FILE) var song_path = ""
 
+export var auto_mode: bool = false
+
 export var song_content_starter = "MagentaSongFormatStart"
 export var song_content_ender = "MagentaSongFormatEnd"
 
@@ -17,16 +19,23 @@ var finished_chart = ""
 onready var hitspots = $HitSpots
 onready var conductor = $Conductor
 onready var offset_timer = $OffsetTimer
+onready var lyric_label = $CanvasLayer2/LyricsLabel
+onready var auto_mode_label = $CanvasLayer2/AutoModeLabel
+onready var video_player = $CanvasLayer/VideoPlayer
 
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
 	conductor.bpm = song_bpm
 	conductor.offset = song_offset
+	lyric_label.text = ""
+	auto_mode_label.visible = auto_mode
+	hitspots.set_auto_mode(auto_mode)
 	get_file_content()
 	get_song_content()
 	process_song_content()
 	initialize_conductor()
+	initialize_video_player()
 	
 func process_song_content():
 	var regex = RegEx.new()
@@ -39,7 +48,8 @@ func process_song_content():
 	
 func start_song():
 	conductor.playing = true
-	$CanvasLayer/VideoPlayer.play()
+	if video_player.stream:
+		video_player.play()
 	
 func beat_reported(beat_number):
 	var beat = beat_number - 1
@@ -74,15 +84,18 @@ func process_command(command):
 			"b": #change rotation degrees
 				var lane = get_lane_number(command)
 				var parameters = get_command_parameters(command)
-				hitspots.change_hitspot_rotation_degrees(lane, parameters[0], parameters[1])
+				hitspots.change_hitspot_rotation_degrees(lane, float(parameters[0]), float(parameters[1]))
 			"c": #add rotation degrees
 				var lane = get_lane_number(command)
 				var parameters = get_command_parameters(command)
-				hitspots.add_hitspot_rotation_degrees(lane, parameters[0], parameters[1])
+				hitspots.add_hitspot_rotation_degrees(lane, float(parameters[0]), float(parameters[1]))
 			"d": #change note spawn position - Soon!
 				pass
 			"e": #empty note
 				pass
+			"l": #lyric
+				var parameters = get_command_parameters(command)
+				change_lyrics_label(parameters[0])
 			_:
 				pass
 	else:
@@ -94,7 +107,7 @@ func get_command_parameters(command):
 	var parameters = []
 	for result in regex.search_all(command):
 		if result:
-			parameters.push_back(float(result.get_string()))
+			parameters.push_back(result.get_string())
 		else:
 			return
 	return parameters
@@ -131,6 +144,17 @@ func get_song_content():
 		song_content = result.get_string().strip_edges()
 	else:
 		pass
+		
+func initialize_video_player():
+	var video_regex = RegEx.new()
+	video_regex.compile("(?<=VIDEOSRC:).*")
+	var video_result = video_regex.search(file_content)
+	
+	if video_result:
+		var result = video_result.get_string().strip_edges()
+		var video = load(result)
+		print(result)
+		video_player.stream = video
 
 func initialize_conductor():
 	var bpm_regex = RegEx.new()
@@ -161,5 +185,11 @@ func initialize_conductor():
 		pass
 
 func _on_Button_pressed():
-	$Button.visible = false
+	$StartButton.visible = false
 	start_song()
+	
+func change_lyrics_label(lyrics):
+	if lyrics:
+		lyric_label.text = str(lyrics)
+	else:
+		pass

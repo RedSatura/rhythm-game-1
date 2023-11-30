@@ -34,3 +34,7 @@ func change_hitspot_note_spawn_position(hitspot_number: int, new_position: Vecto
 
 func change_hitspot_note_spawn_interval(hitspot_number: int, new_interval: float):
 	pass
+	
+func set_auto_mode(status):
+	for hitspot in hitspots:
+		hitspot.auto_mode = status
