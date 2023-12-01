@@ -19,6 +19,8 @@ signal beat(position)
 # warning-ignore:unused_signal
 signal measure(position)
 
+onready var offset_timer = $OffsetTimer
+
 func _ready():
 	seconds_per_quarter_beat = 60.0 / bpm / 4
 

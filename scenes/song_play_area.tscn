@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/Playpen_Sans/static/PlaypenSans-Bold.ttf" type="DynamicFontData" id=5]
 
 [sub_resource type="DynamicFont" id=1]
+size = 20
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
@@ -19,8 +20,9 @@ script = ExtResource( 2 )
 
 [node name="SongManager" parent="." instance=ExtResource( 1 )]
 position = Vector2( 512, 300 )
-song_path = "res://songs/Bad Apple!!/Bad Apple!!.masf"
+song_path = "res://songs/Help me, ERINNNNNN!!/Help me, ERINNNNNN!!.masf"
 auto_mode = true
+play_from_quarter_beat = 100
 
 [node name="ScoreLabel" type="Label" parent="."]
 margin_left = 8.0

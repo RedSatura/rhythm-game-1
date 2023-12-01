@@ -60,9 +60,10 @@ func _on_GoodArea_area_entered(_area):
 func _on_PerfectArea_area_entered(_area):
 	perfect = true
 	if auto_mode:
-		current_note.destroy_note()
-		HitSpotEventBus.emit_signal("update_score", "PERFECT")
-		current_note = null
+		if current_note != null:
+			current_note.destroy_note()
+			HitSpotEventBus.emit_signal("update_score", "PERFECT")
+			current_note = null
 
 func _on_PerfectArea_area_exited(_area):
 	perfect = false

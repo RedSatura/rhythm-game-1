@@ -3,14 +3,13 @@ extends Node2D
 export(String, FILE) var song_path = ""
 
 export var auto_mode: bool = false
+export var play_from_quarter_beat = 0
 
 export var song_content_starter = "MagentaSongFormatStart"
 export var song_content_ender = "MagentaSongFormatEnd"
 
-
 export var song_bpm: int = 120
 export var song_offset: float = 0
-
 
 var file_content = ""
 var song_content = ""
@@ -18,7 +17,6 @@ var finished_chart = ""
 
 onready var hitspots = $HitSpots
 onready var conductor = $Conductor
-onready var offset_timer = $OffsetTimer
 onready var lyric_label = $CanvasLayer2/LyricsLabel
 onready var auto_mode_label = $CanvasLayer2/AutoModeLabel
 onready var video_player = $CanvasLayer/VideoPlayer
@@ -47,21 +45,29 @@ func process_song_content():
 		pass
 	
 func start_song():
-	conductor.playing = true
-	if video_player.stream:
-		video_player.play()
+	if play_from_quarter_beat != 0:
+		conductor.stream.loop = false
+		conductor.play_from_beat(play_from_quarter_beat, song_offset)
+	else:
+		conductor.stream.loop = false
+		conductor.play()
+		if video_player.stream:
+			video_player.play()
 	
 func beat_reported(beat_number):
 	var beat = beat_number - 1
-	if beat < finished_chart.size():
-		if finished_chart[beat] != null:
-			var beat_content = get_bracket_content(finished_chart[beat].get_string().strip_edges())
-			if beat_content:
-				var commands = RegEx.new()
-				commands.compile("[^,]+")
-				var result = commands.search_all(beat_content)
-				for x in result:
-					process_command(x.get_string().strip_edges())
+	if finished_chart != null && finished_chart != []:
+		if beat < finished_chart.size():
+			if finished_chart[beat] != null:
+				var beat_content = get_bracket_content(finished_chart[beat].get_string().strip_edges())
+				if beat_content:
+					var commands = RegEx.new()
+					commands.compile("[^+]+")
+					var result = commands.search_all(beat_content)
+					for x in result:
+						process_command(x.get_string().strip_edges())
+			else:
+				pass
 		else:
 			pass
 	else:
@@ -105,6 +111,7 @@ func get_command_parameters(command):
 	var regex = RegEx.new()
 	regex.compile("(?<=#)(.*?)(?=#)")
 	var parameters = []
+	print(command)
 	for result in regex.search_all(command):
 		if result:
 			parameters.push_back(result.get_string())
@@ -153,7 +160,6 @@ func initialize_video_player():
 	if video_result:
 		var result = video_result.get_string().strip_edges()
 		var video = load(result)
-		print(result)
 		video_player.stream = video
 
 func initialize_conductor():
@@ -193,3 +199,12 @@ func change_lyrics_label(lyrics):
 		lyric_label.text = str(lyrics)
 	else:
 		pass
+
+func _on_VideoPlayer_finished():
+	video_player.stream = null
+
+func _on_Conductor_finished():
+	conductor.stop()
+	
+func end_song():
+	pass
