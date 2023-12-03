@@ -24,16 +24,16 @@ onready var video_player = $CanvasLayer/VideoPlayer
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
-	conductor.bpm = song_bpm
-	conductor.offset = song_offset
-	lyric_label.text = ""
-	auto_mode_label.visible = auto_mode
-	hitspots.set_auto_mode(auto_mode)
 	get_file_content()
 	get_song_content()
 	process_song_content()
 	initialize_conductor()
 	initialize_video_player()
+	conductor.bpm = song_bpm
+	conductor.offset = song_offset
+	lyric_label.text = ""
+	auto_mode_label.visible = auto_mode
+	hitspots.set_auto_mode(auto_mode)
 	
 func process_song_content():
 	var regex = RegEx.new()
@@ -45,14 +45,15 @@ func process_song_content():
 		pass
 	
 func start_song():
-	if play_from_quarter_beat != 0:
-		conductor.stream.loop = false
-		conductor.play_from_beat(play_from_quarter_beat, song_offset)
-	else:
-		conductor.stream.loop = false
-		conductor.play()
-		if video_player.stream:
-			video_player.play()
+	if conductor.stream:
+		if play_from_quarter_beat != 0:
+			conductor.stream.loop = false
+			conductor.play_from_beat(play_from_quarter_beat, 0)
+		else:
+			conductor.stream.loop = false
+			conductor.play_song()
+			if video_player.stream:
+				video_player.play()
 	
 func beat_reported(beat_number):
 	var beat = beat_number - 1
@@ -111,7 +112,6 @@ func get_command_parameters(command):
 	var regex = RegEx.new()
 	regex.compile("(?<=#)(.*?)(?=#)")
 	var parameters = []
-	print(command)
 	for result in regex.search_all(command):
 		if result:
 			parameters.push_back(result.get_string())

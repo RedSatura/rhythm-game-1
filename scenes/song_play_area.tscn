@@ -22,7 +22,6 @@ script = ExtResource( 2 )
 position = Vector2( 512, 300 )
 song_path = "res://songs/Help me, ERINNNNNN!!/Help me, ERINNNNNN!!.masf"
 auto_mode = true
-play_from_quarter_beat = 100
 
 [node name="ScoreLabel" type="Label" parent="."]
 margin_left = 8.0
