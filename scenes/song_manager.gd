@@ -24,10 +24,7 @@ onready var video_player = $CanvasLayer/VideoPlayer
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
-<<<<<<< HEAD
 	song_path = SongEventBus.song_path
-=======
->>>>>>> origin/develop
 	get_file_content()
 	get_song_content()
 	process_song_content()
@@ -35,7 +32,7 @@ func _ready():
 	initialize_video_player()
 	conductor.bpm = song_bpm
 	conductor.offset = song_offset
-	lyric_label.text = ""
+	lyric_labels[0].text = ""
 	auto_mode_label.visible = auto_mode
 	hitspots.set_auto_mode(auto_mode)
 	

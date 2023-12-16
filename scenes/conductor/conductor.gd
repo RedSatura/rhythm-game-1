@@ -71,17 +71,10 @@ func _on_StartTimer_timeout():
 func play_song():
 	var effect = AudioServer.get_bus_effect(1, 0)
 	if effect:
-<<<<<<< HEAD
-=======
-		print(offset)
->>>>>>> origin/develop
 		effect.set_dry(0)
 		effect.set_tap1_delay_ms(offset)
 		effect.set_tap2_active(false)
 	play()
-<<<<<<< HEAD
-
+	
 func _on_Conductor_finished():
 	get_parent().end_song()
-=======
->>>>>>> origin/develop
