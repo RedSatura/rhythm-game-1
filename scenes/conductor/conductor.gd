@@ -19,8 +19,6 @@ signal beat(position)
 # warning-ignore:unused_signal
 signal measure(position)
 
-onready var offset_timer = $OffsetTimer
-
 func _ready():
 	seconds_per_quarter_beat = 60.0 / bpm / 4
 
@@ -52,7 +50,7 @@ func play_with_beat_offset(num):
 	$StartTimer.start()
 	
 func play_from_beat(beat, offset_num):
-	play()
+	play_song()
 	seek(beat * seconds_per_quarter_beat)
 	beats_before_start = offset_num
 	measure = beat % measures
@@ -66,6 +64,17 @@ func _on_StartTimer_timeout():
 		 + AudioServer.get_output_latency())
 		$StartTimer.start()
 	else:
-		play()
+		play_song()
 		$StartTimer.stop()
 	_report_beat()
+	
+func play_song():
+	var effect = AudioServer.get_bus_effect(1, 0)
+	if effect:
+		effect.set_dry(0)
+		effect.set_tap1_delay_ms(offset)
+		effect.set_tap2_active(false)
+	play()
+
+func _on_Conductor_finished():
+	get_parent().end_song()

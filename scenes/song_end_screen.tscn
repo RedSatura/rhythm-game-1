@@ -1,0 +1,73 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://scenes/ui/song_end_screen/result_label.gd" type="Script" id=2]
+[ext_resource path="res://assets/Playpen_Sans/static/PlaypenSans-Bold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://resources/font/font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://scenes/ui/scene_link_button/scene_link_button.tscn" type="PackedScene" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 3 )
+
+[node name="SongEndScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color( 0, 0, 0, 1 )
+margin_left = -80.0
+margin_top = -64.0
+margin_right = 1088.0
+margin_bottom = 640.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 440.0
+margin_bottom = 120.0
+custom_fonts/font = ExtResource( 4 )
+text = "Song Name"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ResultLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 136.0
+margin_right = 376.0
+margin_bottom = 312.0
+custom_fonts/font = SubResource( 1 )
+text = "Perfect:
+Good:
+Miss:"
+valign = 1
+clip_text = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SceneLinkButton" parent="." instance=ExtResource( 5 )]
+margin_left = 312.0
+margin_top = 384.0
+margin_right = 735.0
+margin_bottom = 544.0
+custom_fonts/font = SubResource( 3 )
+text = "Back To Main Menu"
+flat = true
+scene = "res://scenes/main_menu.tscn"

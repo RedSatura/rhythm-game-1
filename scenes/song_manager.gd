@@ -17,23 +17,26 @@ var finished_chart = ""
 
 onready var hitspots = $HitSpots
 onready var conductor = $Conductor
-onready var lyric_label = $CanvasLayer2/LyricsLabel
+onready var lyric_labels = [$CanvasLayer2/LyricsLabel, $CanvasLayer2/LyricsLabel2]
 onready var auto_mode_label = $CanvasLayer2/AutoModeLabel
 onready var video_player = $CanvasLayer/VideoPlayer
 
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
-	conductor.bpm = song_bpm
-	conductor.offset = song_offset
-	lyric_label.text = ""
-	auto_mode_label.visible = auto_mode
-	hitspots.set_auto_mode(auto_mode)
+	song_path = SongEventBus.song_path
 	get_file_content()
 	get_song_content()
 	process_song_content()
 	initialize_conductor()
 	initialize_video_player()
+	
+	conductor.bpm = song_bpm
+	conductor.offset = song_offset
+	lyric_labels[0].text = ""
+	auto_mode = SongEventBus.auto_mode
+	auto_mode_label.visible = auto_mode
+	hitspots.set_auto_mode(auto_mode)
 	
 func process_song_content():
 	var regex = RegEx.new()
@@ -45,14 +48,15 @@ func process_song_content():
 		pass
 	
 func start_song():
-	if play_from_quarter_beat != 0:
-		conductor.stream.loop = false
-		conductor.play_from_beat(play_from_quarter_beat, song_offset)
-	else:
-		conductor.stream.loop = false
-		conductor.play()
-		if video_player.stream:
-			video_player.play()
+	if conductor.stream:
+		if play_from_quarter_beat != 0:
+			conductor.stream.loop = false
+			conductor.play_from_beat(play_from_quarter_beat, 0)
+		else:
+			conductor.stream.loop = false
+			conductor.play_song()
+			if video_player.stream:
+				video_player.play()
 	
 func beat_reported(beat_number):
 	var beat = beat_number - 1
@@ -111,7 +115,6 @@ func get_command_parameters(command):
 	var regex = RegEx.new()
 	regex.compile("(?<=#)(.*?)(?=#)")
 	var parameters = []
-	print(command)
 	for result in regex.search_all(command):
 		if result:
 			parameters.push_back(result.get_string())
@@ -194,9 +197,15 @@ func _on_Button_pressed():
 	$StartButton.visible = false
 	start_song()
 	
-func change_lyrics_label(lyrics):
+func change_lyrics_label(lyrics, lyric_number = 0):
 	if lyrics:
-		lyric_label.text = str(lyrics)
+		match lyric_number:
+			0:
+				lyric_labels[0].text = str(lyrics)
+			1:
+				lyric_labels[1].text = str(lyrics)
+			_:
+				lyric_labels[0].text = str(lyrics)
 	else:
 		pass
 
@@ -207,4 +216,4 @@ func _on_Conductor_finished():
 	conductor.stop()
 	
 func end_song():
-	pass
+	SongEventBus.emit_signal("song_ended")
