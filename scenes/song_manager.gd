@@ -3,6 +3,7 @@ extends Node2D
 export(String, FILE) var song_path = ""
 
 export var auto_mode: bool = false
+export var in_editor: bool = false
 export var play_from_quarter_beat = 0
 
 export var song_content_starter = "MagentaSongFormatStart"
@@ -164,10 +165,13 @@ func initialize_video_player():
 	var video_regex = RegEx.new()
 	video_regex.compile("(?<=VIDEOSRC:).*")
 	var video_result = video_regex.search(file_content)
-	
+	var video
 	if video_result:
 		var result = video_result.get_string().strip_edges()
-		var video = load(result)
+		if in_editor:
+			video = load("res://" + str(result))
+		else:
+			video = load("user://" + str(result))
 		video_player.stream = video
 
 func initialize_conductor():
@@ -193,7 +197,11 @@ func initialize_conductor():
 		
 	if audio_result:
 		var result = audio_result.get_string().strip_edges()
-		var audio = load(result)
+		var audio
+		if in_editor:
+			audio = load("res://" + str(result))
+		else:
+			audio = load("user://" + str(result))
 		conductor.stream = audio
 	else:
 		pass

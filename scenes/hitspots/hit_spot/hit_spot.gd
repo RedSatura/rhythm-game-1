@@ -34,6 +34,9 @@ onready var note_spawn_cooldown = $NoteSpawnCooldown
 onready var timer = $NoteSpawnInterval
 onready var input_cooldown = $InputCooldown
 onready var tween = $Tween
+onready var note_hit_sound = $NoteHitSound
+onready var note_miss_sound = $NoteMissSound
+onready var particles = $Particles2D
 
 func _ready():
 	pivot.rotation_degrees = initial_rotation
@@ -63,6 +66,8 @@ func _on_PerfectArea_area_entered(_area):
 		if current_note != null:
 			current_note.destroy_note()
 			HitSpotEventBus.emit_signal("update_score", "PERFECT")
+			note_hit_sound.play()
+			emit_particles()
 			current_note = null
 
 func _on_PerfectArea_area_exited(_area):
@@ -81,14 +86,19 @@ func _unhandled_input(event):
 				if perfect:
 					current_note.destroy_note()
 					HitSpotEventBus.emit_signal("update_score", "PERFECT")
+					note_hit_sound.play()
+					emit_particles()
 					current_note = null
 				elif good:
 					current_note.destroy_note()
 					HitSpotEventBus.emit_signal("update_score", "GOOD")
+					note_hit_sound.play()
+					emit_particles()
 					current_note = null
 				elif missable:
 					HitSpotEventBus.emit_signal("note_missed")
 					current_note.destroy_note()
+					note_miss_sound.play()
 					current_note = null
 
 func change_rotation_degrees(degrees: float, seconds: float):
@@ -121,6 +131,7 @@ func _on_MissDetector_area_exited(_area):
 
 func _on_MissedNotesManager_area_entered(area):
 	area.destroy_note()
+	note_miss_sound.play()
 	HitSpotEventBus.emit_signal("note_missed")
 	
 func change_note_spawn_position(new_position: Vector2):
@@ -131,3 +142,7 @@ func _on_Tween_tween_all_completed():
 
 func _on_InputCooldown_timeout():
 	self.modulate = original_color
+	
+func emit_particles():
+	particles.set_emitting(false)
+	particles.set_emitting(true)

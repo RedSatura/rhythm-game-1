@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://resources/font/font.tres" type="DynamicFont" id=2]
@@ -35,6 +35,9 @@ font_data = ExtResource( 6 )
 [sub_resource type="DynamicFont" id=8]
 font_data = ExtResource( 6 )
 
+[sub_resource type="DynamicFont" id=10]
+font_data = ExtResource( 6 )
+
 [node name="MainMenu" type="Node2D"]
 script = ExtResource( 4 )
 
@@ -46,6 +49,7 @@ margin_left = -128.0
 margin_top = -88.0
 margin_right = 1112.0
 margin_bottom = 664.0
+rect_scale = Vector2( 1.1111, 1 )
 texture = ExtResource( 1 )
 expand = true
 stretch_mode = 1
@@ -105,6 +109,7 @@ margin_right = 800.0
 margin_bottom = 424.0
 window_title = "Open a File"
 resizable = true
+mode_overrides_title = false
 mode = 0
 access = 2
 current_dir = "/Users/gianbryanmariel/Desktop/RedSatura's files/godot stuff/Magenta Rhythm Game"
@@ -170,14 +175,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Songs" type="Control" parent="CanvasLayer"]
-visible = false
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Settings" type="Label" parent="CanvasLayer"]
 margin_left = 744.0
 margin_top = 336.0
@@ -198,6 +195,19 @@ focus_mode = 0
 custom_fonts/font = SubResource( 8 )
 text = "Auto Mode"
 flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Credits" type="Label" parent="CanvasLayer"]
+margin_left = 696.0
+margin_top = 512.0
+margin_right = 1017.0
+margin_bottom = 593.0
+custom_fonts/font = SubResource( 10 )
+text = "Credits:
+Tambourine and Tom Drum Sound Effect from Pixabay"
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
