@@ -20,6 +20,11 @@ script = ExtResource( 2 )
 
 [node name="SongManager" parent="." instance=ExtResource( 1 )]
 position = Vector2( 512, 300 )
+<<<<<<< HEAD
+=======
+song_path = "res://songs/Help me, ERINNNNNN!!/Help me, ERINNNNNN!!.masf"
+auto_mode = true
+>>>>>>> origin/develop
 
 [node name="ScoreLabel" type="Label" parent="."]
 margin_left = 8.0
