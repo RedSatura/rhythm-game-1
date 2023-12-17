@@ -74,6 +74,7 @@ func play_song():
 		effect.set_dry(0)
 		effect.set_tap1_delay_ms(offset)
 		effect.set_tap2_active(false)
+	seconds_per_quarter_beat = 60.0 / bpm / 4
 	play()
 	
 func _on_Conductor_finished():

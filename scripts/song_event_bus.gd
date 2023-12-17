@@ -9,4 +9,6 @@ var miss = 0
 
 var song_path = ""
 
+var song_title = ""
+
 var auto_mode = false

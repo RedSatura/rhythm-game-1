@@ -21,26 +21,24 @@ onready var conductor = $Conductor
 onready var lyric_labels = [$CanvasLayer2/LyricsLabel, $CanvasLayer2/LyricsLabel2]
 onready var auto_mode_label = $CanvasLayer2/AutoModeLabel
 onready var video_player = $CanvasLayer/VideoPlayer
+onready var video_timer = $CanvasLayer/VideoPlayer/VideoTimer
 
 func _ready():
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("report_beat", self, "beat_reported")
-	song_path = SongEventBus.song_path
+	if in_editor:
+		pass
+	else:
+		song_path = SongEventBus.song_path
 	get_file_content()
 	get_song_content()
 	process_song_content()
 	initialize_conductor()
 	initialize_video_player()
-	conductor.bpm = song_bpm
-	conductor.offset = song_offset
-	lyric_labels[0].text = ""
-	auto_mode_label.visible = auto_mode
-	hitspots.set_auto_mode(auto_mode)
 	
 	conductor.bpm = song_bpm
-	conductor.offset = song_offset
-	lyric_labels[0].text = ""
 	auto_mode = SongEventBus.auto_mode
+	lyric_labels[0].text = ""
 	auto_mode_label.visible = auto_mode
 	hitspots.set_auto_mode(auto_mode)
 	
@@ -59,10 +57,15 @@ func start_song():
 			conductor.stream.loop = false
 			conductor.play_from_beat(play_from_quarter_beat, 0)
 		else:
+			if video_player.stream:
+				if song_offset > 0:
+					video_timer.start(song_offset)
+				else:
+					video_player.play()
 			conductor.stream.loop = false
 			conductor.play_song()
-			if video_player.stream:
-				video_player.play()
+	else:
+		pass
 	
 func beat_reported(beat_number):
 	var beat = beat_number - 1
@@ -186,12 +189,13 @@ func initialize_conductor():
 	var audio_result = audio_regex.search(file_content)
 	
 	if bpm_result:
-		conductor.bpm = int(bpm_result.get_string().strip_edges())
+		song_bpm = int(bpm_result.get_string().strip_edges())
 	else:
 		pass
 		
 	if offset_result:
 		conductor.offset = int(offset_result.get_string().strip_edges())
+		song_offset = float(offset_result.get_string().strip_edges()) / 1000.0
 	else:
 		pass
 		
@@ -230,3 +234,13 @@ func _on_Conductor_finished():
 	
 func end_song():
 	SongEventBus.emit_signal("song_ended")
+	
+func get_song_info():
+	var title_regex = RegEx.new()
+	title_regex.compile("(?<=TITLE:).*")
+	var title_result = title_regex.search(file_content)
+	
+	SongEventBus.song_title = str(title_result.get_string().strip_edges())
+
+func _on_VideoTimer_timeout():
+	video_player.play()

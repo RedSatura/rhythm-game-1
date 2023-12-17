@@ -2,6 +2,7 @@ extends Node2D
 
 func _ready():
 	make_songs_folder()
+	OS.window_maximized = true
 	SongEventBus.auto_mode = false
 
 func _on_ShowFileDialog_pressed():

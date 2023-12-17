@@ -35,8 +35,6 @@ auto_mode = true
 [node name="Conductor" parent="." instance=ExtResource( 3 )]
 volume_db = -10.0
 autoplay = false
-bus = "ConductorSong"
-bpm = 138
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
@@ -60,6 +58,9 @@ margin_bottom = 600.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="VideoTimer" type="Timer" parent="CanvasLayer/VideoPlayer"]
+one_shot = true
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 layer = 2
@@ -110,7 +111,6 @@ __meta__ = {
 [node name="DebugUI" type="CanvasLayer" parent="."]
 
 [node name="BeatCounter" type="Label" parent="DebugUI"]
-visible = false
 margin_left = 16.0
 margin_top = 520.0
 margin_right = 272.0
@@ -134,4 +134,5 @@ __meta__ = {
 
 [connection signal="finished" from="Conductor" to="." method="_on_Conductor_finished"]
 [connection signal="finished" from="CanvasLayer/VideoPlayer" to="." method="_on_VideoPlayer_finished"]
+[connection signal="timeout" from="CanvasLayer/VideoPlayer/VideoTimer" to="." method="_on_VideoTimer_timeout"]
 [connection signal="pressed" from="StartButton" to="." method="_on_Button_pressed"]

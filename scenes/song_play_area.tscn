@@ -26,9 +26,6 @@ script = ExtResource( 2 )
 
 [node name="SongManager" parent="." instance=ExtResource( 1 )]
 position = Vector2( 512, 300 )
-song_path = "res://songs/Wakasagihime's 100 Sushi Topping Game/Wakasagihime's 100 Sushi Topping Game.masf"
-in_editor = true
-play_from_quarter_beat = 20
 
 [node name="ScoreLabel" type="Label" parent="."]
 margin_left = 8.0

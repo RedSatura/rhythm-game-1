@@ -111,9 +111,9 @@ window_title = "Open a File"
 resizable = true
 mode_overrides_title = false
 mode = 0
-access = 2
-current_dir = "/Users/gianbryanmariel/Desktop/RedSatura's files/godot stuff/Magenta Rhythm Game"
-current_path = "/Users/gianbryanmariel/Desktop/RedSatura's files/godot stuff/Magenta Rhythm Game/"
+access = 1
+current_dir = "user://songs"
+current_path = "user://songs/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -156,7 +156,7 @@ margin_top = 376.0
 margin_right = 520.0
 margin_bottom = 440.0
 custom_fonts/font = SubResource( 4 )
-text = "To make sure songs don't break, please place the songs into the songs folder in the project's data folder."
+text = "To make sure songs don't break, please place the songs into the songs folder in the game's user data."
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -201,12 +201,13 @@ __meta__ = {
 
 [node name="Credits" type="Label" parent="CanvasLayer"]
 margin_left = 696.0
-margin_top = 512.0
+margin_top = 480.0
 margin_right = 1017.0
-margin_bottom = 593.0
+margin_bottom = 589.0
 custom_fonts/font = SubResource( 10 )
 text = "Credits:
-Tambourine and Tom Drum Sound Effect from Pixabay"
+Tambourine and Tom Drum Sound Effect from Pixabay
+Made with Godot 3.4"
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false

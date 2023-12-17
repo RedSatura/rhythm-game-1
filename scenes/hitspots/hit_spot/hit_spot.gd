@@ -36,7 +36,7 @@ onready var input_cooldown = $InputCooldown
 onready var tween = $Tween
 onready var note_hit_sound = $NoteHitSound
 onready var note_miss_sound = $NoteMissSound
-onready var particles = $Particles2D
+onready var particles = $Pivot/Particles2D
 
 func _ready():
 	pivot.rotation_degrees = initial_rotation
@@ -144,5 +144,5 @@ func _on_InputCooldown_timeout():
 	self.modulate = original_color
 	
 func emit_particles():
-	particles.set_emitting(false)
+	particles.restart()
 	particles.set_emitting(true)

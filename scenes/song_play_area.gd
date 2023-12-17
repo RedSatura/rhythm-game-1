@@ -16,6 +16,7 @@ func _ready():
 	HitSpotEventBus.connect("update_score", self, "update_score")
 # warning-ignore:return_value_discarded
 	HitSpotEventBus.connect("note_missed", self, "note_missed")
+# warning-ignore:return_value_discarded
 	SongEventBus.connect("song_ended", self, "end_song")
 
 func update_score(score):
@@ -65,13 +66,16 @@ func end_song():
 	SongEventBus.perfect = perfect
 	SongEventBus.good = good
 	SongEventBus.miss = miss
+# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://scenes/song_end_screen.tscn")
 	
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("back_to_main_menu"):
+# warning-ignore:return_value_discarded
 		get_tree().change_scene("res://scenes/main_menu.tscn")
 		
 	if Input.is_action_just_pressed("restart"):
+# warning-ignore:return_value_discarded
 		get_tree().reload_current_scene()
 		
 func update_combo_label(new_value):
