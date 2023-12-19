@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/song_manager.gd" type="Script" id=1]
 [ext_resource path="res://scenes/hitspots/hitspots.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/Playpen_Sans/PlaypenSans-VariableFont_wght.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/Playpen_Sans/static/PlaypenSans-Bold.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://scenes/debug_ui/beat_counter.gd" type="Script" id=7]
+[ext_resource path="res://assets/Playpen_Sans/static/PlaypenSans-ExtraBold.ttf" type="DynamicFontData" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -20,15 +21,19 @@ outline_color = Color( 1, 0, 0, 1 )
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=2]
-outline_size = 1
+size = 24
+outline_size = 3
 font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 40
+font_data = ExtResource( 8 )
 
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 6 )
 
 [node name="SongManager" type="Node2D"]
 script = ExtResource( 1 )
-auto_mode = true
 
 [node name="HitSpots" parent="." instance=ExtResource( 2 )]
 
@@ -108,13 +113,28 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SongTitleLabel" type="Label" parent="CanvasLayer2"]
+visible = false
+margin_left = 16.0
+margin_top = 464.0
+margin_right = 1008.0
+margin_bottom = 525.0
+custom_fonts/font = SubResource( 5 )
+text = "Song Title"
+align = 2
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="DebugUI" type="CanvasLayer" parent="."]
 
 [node name="BeatCounter" type="Label" parent="DebugUI"]
-margin_left = 16.0
-margin_top = 520.0
-margin_right = 272.0
-margin_bottom = 584.0
+margin_left = 24.0
+margin_top = 448.0
+margin_right = 280.0
+margin_bottom = 512.0
 custom_fonts/font = SubResource( 3 )
 align = 1
 valign = 1
@@ -124,15 +144,21 @@ __meta__ = {
 }
 
 [node name="StartButton" type="Button" parent="."]
-margin_left = 448.0
-margin_top = 240.0
-margin_right = 512.0
-margin_bottom = 304.0
+visible = false
+margin_left = 1248.0
+margin_top = 248.0
+margin_right = 1312.0
+margin_bottom = 312.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="SongStartTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
 
 [connection signal="finished" from="Conductor" to="." method="_on_Conductor_finished"]
 [connection signal="finished" from="CanvasLayer/VideoPlayer" to="." method="_on_VideoPlayer_finished"]
 [connection signal="timeout" from="CanvasLayer/VideoPlayer/VideoTimer" to="." method="_on_VideoTimer_timeout"]
 [connection signal="pressed" from="StartButton" to="." method="_on_Button_pressed"]
+[connection signal="timeout" from="SongStartTimer" to="." method="_on_SongStartTimer_timeout"]

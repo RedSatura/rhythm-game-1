@@ -136,7 +136,7 @@ __meta__ = {
 margin_left = 744.0
 margin_top = 64.0
 margin_right = 1016.0
-margin_bottom = 392.0
+margin_bottom = 285.0
 custom_fonts/font = SubResource( 5 )
 text = "Useful Keys:
 D - Red hitspot

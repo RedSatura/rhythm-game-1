@@ -4,6 +4,7 @@ export(String, FILE) var song_path = ""
 
 export var auto_mode: bool = false
 export var in_editor: bool = false
+export var start_immediately = false
 export var play_from_quarter_beat = 0
 
 export var song_content_starter = "MagentaSongFormatStart"
@@ -11,6 +12,9 @@ export var song_content_ender = "MagentaSongFormatEnd"
 
 export var song_bpm: int = 120
 export var song_offset: float = 0
+
+
+var song_title = ""
 
 var file_content = ""
 var song_content = ""
@@ -22,6 +26,8 @@ onready var lyric_labels = [$CanvasLayer2/LyricsLabel, $CanvasLayer2/LyricsLabel
 onready var auto_mode_label = $CanvasLayer2/AutoModeLabel
 onready var video_player = $CanvasLayer/VideoPlayer
 onready var video_timer = $CanvasLayer/VideoPlayer/VideoTimer
+onready var song_title_label = $CanvasLayer2/SongTitleLabel
+onready var song_start_timer = $SongStartTimer
 
 func _ready():
 # warning-ignore:return_value_discarded
@@ -33,6 +39,7 @@ func _ready():
 	get_file_content()
 	get_song_content()
 	process_song_content()
+	get_song_info()
 	initialize_conductor()
 	initialize_video_player()
 	
@@ -41,6 +48,11 @@ func _ready():
 	lyric_labels[0].text = ""
 	auto_mode_label.visible = auto_mode
 	hitspots.set_auto_mode(auto_mode)
+	if start_immediately:
+		start_song()
+	else:
+		song_start_timer.start()
+		show_song_label_info()
 	
 func process_song_content():
 	var regex = RegEx.new()
@@ -114,7 +126,8 @@ func process_command(command):
 				pass
 			"l": #lyric
 				var parameters = get_command_parameters(command)
-				change_lyrics_label(parameters[0])
+				if parameters:
+					change_lyrics_label(parameters[0])
 			_:
 				pass
 	else:
@@ -240,7 +253,18 @@ func get_song_info():
 	title_regex.compile("(?<=TITLE:).*")
 	var title_result = title_regex.search(file_content)
 	
-	SongEventBus.song_title = str(title_result.get_string().strip_edges())
+	if title_result:
+		song_title = str(title_result.get_string().strip_edges())
+		SongEventBus.song_title = str(title_result.get_string().strip_edges())
 
 func _on_VideoTimer_timeout():
 	video_player.play()
+
+func _on_SongStartTimer_timeout():
+	song_title_label.hide()
+	start_song()
+	
+func show_song_label_info():
+	song_title_label.show()
+	song_title_label.text = song_title
+	prints("Song Title: ", song_title)

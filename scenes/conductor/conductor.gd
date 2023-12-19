@@ -78,4 +78,5 @@ func play_song():
 	play()
 	
 func _on_Conductor_finished():
-	get_parent().end_song()
+	if get_parent():
+		get_parent().end_song()
