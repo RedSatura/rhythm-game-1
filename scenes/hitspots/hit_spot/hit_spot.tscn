@@ -34,6 +34,7 @@ angle_random = 0.5
 scale = 4.0
 
 [node name="HitSpot" type="Node2D"]
+self_modulate = Color( 1, 1, 1, 0.0235294 )
 script = ExtResource( 1 )
 input = "hitspot_1"
 note_speed = 1.0
@@ -121,8 +122,9 @@ one_shot = true
 
 [node name="NoteHitSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
+volume_db = -2.0
 
-[node name="NoteMissSound" type="AudioStreamPlayer2D" parent="."]
+[node name="NoteMissSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
 
 [connection signal="area_entered" from="Pivot/HitSpotPosition/GoodArea" to="." method="_on_GoodArea_area_entered"]

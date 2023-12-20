@@ -112,6 +112,7 @@ resizable = true
 mode_overrides_title = false
 mode = 0
 access = 1
+filters = PoolStringArray( "*.masf", "*.txt" )
 current_dir = "user://songs"
 current_path = "user://songs/"
 __meta__ = {

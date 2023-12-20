@@ -34,11 +34,12 @@ font_data = ExtResource( 6 )
 
 [node name="SongManager" type="Node2D"]
 script = ExtResource( 1 )
+start_immediately = true
 
 [node name="HitSpots" parent="." instance=ExtResource( 2 )]
 
 [node name="Conductor" parent="." instance=ExtResource( 3 )]
-volume_db = -10.0
+volume_db = -5.0
 autoplay = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -57,7 +58,7 @@ __meta__ = {
 }
 
 [node name="VideoPlayer" type="VideoPlayer" parent="CanvasLayer"]
-modulate = Color( 1, 1, 1, 0.501961 )
+modulate = Color( 1, 1, 1, 0.25098 )
 margin_right = 1024.0
 margin_bottom = 600.0
 __meta__ = {

@@ -19,7 +19,7 @@ func _ready():
 	rating_result.text = "%.2f" % rating + "%"
 	grade_result.text = set_grade(rating)
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	pass
 
 func calculate_hit_rate():

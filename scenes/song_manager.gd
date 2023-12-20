@@ -188,6 +188,7 @@ func initialize_video_player():
 			video = load("res://" + str(result))
 		else:
 			video = load("user://" + str(result))
+	if video:
 		video_player.stream = video
 
 func initialize_conductor():

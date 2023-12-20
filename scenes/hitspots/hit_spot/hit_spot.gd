@@ -80,7 +80,7 @@ func _on_GoodArea_area_exited(_area):
 func _unhandled_input(event):
 	if !auto_mode:
 		if event.is_action_pressed(input, false):
-			self.modulate = Color(1, 1, 1, 1)
+			self.self_modulate = Color(1, 1, 1, 1)
 			input_cooldown.start()
 			if current_note != null:
 				if perfect:
@@ -141,7 +141,7 @@ func _on_Tween_tween_all_completed():
 	note_spawnable = true
 
 func _on_InputCooldown_timeout():
-	self.modulate = original_color
+	self.self_modulate = original_color
 	
 func emit_particles():
 	particles.restart()
