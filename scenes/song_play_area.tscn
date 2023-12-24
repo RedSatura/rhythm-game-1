@@ -26,7 +26,6 @@ script = ExtResource( 2 )
 
 [node name="SongManager" parent="." instance=ExtResource( 1 )]
 position = Vector2( 512, 300 )
-start_immediately = false
 
 [node name="ScoreLabel" type="Label" parent="."]
 margin_left = 8.0

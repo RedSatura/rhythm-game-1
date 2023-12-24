@@ -10,6 +10,7 @@ func _on_ShowFileDialog_pressed():
 
 func _on_FileDialog_file_selected(path):
 	SongEventBus.song_path = path
+# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://scenes/song_play_area.tscn")
 
 func _on_AutoModeButton_pressed():

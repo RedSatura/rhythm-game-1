@@ -29,7 +29,7 @@ func calculate_hit_rate():
 	
 func calculate_rating():
 	var total_notes = SongEventBus.perfect + SongEventBus.good + SongEventBus.miss
-	var result: float = (((SongEventBus.perfect * 2) + (SongEventBus.good)) / (float(total_notes) * 2)) * 100 if total_notes != 0 else 0
+	var result: float = (((SongEventBus.perfect * 1.5) + (SongEventBus.good)) / (float(total_notes) * 1.5)) * 100 if total_notes != 0 else 0
 	return result
 
 func set_grade(rating):

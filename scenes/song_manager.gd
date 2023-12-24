@@ -157,7 +157,10 @@ func get_bracket_content(content):
 	var bracket_content = RegEx.new()
 	bracket_content.compile("(?<=\\[)(.*?)(?=\\])")
 	var result = bracket_content.search(content)
-	return result.get_string().strip_edges()
+	if result:
+		return result.get_string().strip_edges()
+	else:
+		pass
 
 func get_file_content():
 	var file = File.new()
@@ -180,16 +183,11 @@ func get_song_content():
 func initialize_video_player():
 	var video_regex = RegEx.new()
 	video_regex.compile("(?<=VIDEOSRC:).*")
-	var video_result = video_regex.search(file_content)
-	var video
-	if video_result:
-		var result = video_result.get_string().strip_edges()
-		if in_editor:
-			video = load("res://" + str(result))
-		else:
-			video = load("user://" + str(result))
-	if video:
-		video_player.stream = video
+	var result = video_regex.search(file_content)
+	#load external file
+	var ogv = VideoStreamTheora.new()
+	ogv.set_file("user://" + str(result.get_string().strip_edges()))
+	video_player.stream = ogv
 
 func initialize_conductor():
 	var bpm_regex = RegEx.new()
@@ -214,13 +212,14 @@ func initialize_conductor():
 		pass
 		
 	if audio_result:
+		#load external files
 		var result = audio_result.get_string().strip_edges()
-		var audio
-		if in_editor:
-			audio = load("res://" + str(result))
-		else:
-			audio = load("user://" + str(result))
-		conductor.stream = audio
+		var ogg = AudioStreamOGGVorbis.new()
+		var file = File.new()
+		file.open("user://" + str(result), File.READ)
+		ogg.data = file.get_buffer(file.get_len())
+		ogg.set_loop(false)
+		conductor.stream = ogg
 	else:
 		pass
 
@@ -268,4 +267,3 @@ func _on_SongStartTimer_timeout():
 func show_song_label_info():
 	song_title_label.show()
 	song_title_label.text = song_title
-	prints("Song Title: ", song_title)

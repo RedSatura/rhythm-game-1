@@ -6,6 +6,8 @@ export var note_spawn_interval = 1.0
 
 export var initial_rotation = 0
 
+export var auto_hit_rate = 100
+
 export var original_color = Color(0, 0, 0, 0)
 
 var auto_mode = false
@@ -39,6 +41,7 @@ onready var note_miss_sound = $NoteMissSound
 onready var particles = $Pivot/Particles2D
 
 func _ready():
+	randomize()
 	pivot.rotation_degrees = initial_rotation
 	timer.wait_time = note_spawn_interval
 	
@@ -58,23 +61,34 @@ func spawn_note():
 
 func _on_GoodArea_area_entered(_area):
 	good = true
+	perfect = false
 	missable = false
 	
 func _on_PerfectArea_area_entered(_area):
 	perfect = true
 	if auto_mode:
 		if current_note != null:
-			current_note.destroy_note()
-			HitSpotEventBus.emit_signal("update_score", "PERFECT")
-			note_hit_sound.play()
-			emit_particles()
-			current_note = null
+			if auto_hit_rate < 100:
+				var result = randi() % 100
+				if result <= auto_hit_rate:
+					current_note.destroy_note()
+					HitSpotEventBus.emit_signal("update_score", "PERFECT")
+					note_hit_sound.play()
+					emit_particles()
+					current_note = null
+			else:
+				current_note.destroy_note()
+				HitSpotEventBus.emit_signal("update_score", "PERFECT")
+				note_hit_sound.play()
+				emit_particles()
+				current_note = null
 
 func _on_PerfectArea_area_exited(_area):
 	perfect = false
 
 func _on_GoodArea_area_exited(_area):
 	good = false
+	perfect = false
 	missable = true
 	
 func _unhandled_input(event):
